@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 实体映射文件 -->
+<!-- namespace的值对应的Mapper接口的全限定名(包名.接口名) -->
+ <mapper namespace = "cn.kgc.exam.mapper.ExamSubjectMiddleInfoMapper">
+	<select id="viewSubjects" resultMap="viewsubject">
+		select * from examsubjectmiddleinfo where examPaperId=#{examPaperId}
+	</select>
+	
+	<resultMap type="ExamSubjectMiddleInfo" id="viewsubject">
+		<association property="examPaper" javaType="ExamPaperInfo" column="examPaperId" select="cn.kgc.exam.mapper.ExamPaperMapper.getExamPaperById"/>
+		<association property="subject" javaType="SubjectInfo" column="subjectId" select="cn.kgc.exam.mapper.SubjectInfoMapper.getSubjectById"></association>
+	</resultMap>
+	
+	<delete id="removeSubject">
+		delete from examsubjectmiddleinfo where subjectId=#{subjectId} and examPaperId=#{examPaperId}
+	</delete>
+	
+	<select id="getChooseSubId" resultType="ExamSubjectMiddleInfo">
+		select * from examsubjectmiddleinfo where subjectId=#{subjectId} and examPaperId=#{examPaperId}
+	</select>
+	
+	<insert id="addExamSubjectMiddleInfo">
+		insert into examsubjectmiddleinfo values(default,#{examPaperId},#{subjectId});
+	</insert>
+	<!-- 查询试卷中的试题编号 -->
+	<select id="listExamPaper" resultType="java.lang.Integer">
+		select subjectId from examsubjectmiddleinfo where examPaperId=#{examPaperId}
+	</select>
+	
+</mapper> 

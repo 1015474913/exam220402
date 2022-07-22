@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="cn.kgc.exam.mapper.ClassMapper">
+    <resultMap type="ClassInfo" id="listGrade">
+        <association property="grade" javaType="GradeInfo" column="gradeId" select="cn.kgc.exam.mapper.GradeMapper.showGrade"></association>
+    </resultMap>
+    <select id="getClassById" resultMap="listGrade">
+		select * from classinfo where classId=#{classId}
+	</select>
+<select id="getListClass"  resultType="ClassInfo">
+select * from classinfo where gradeId=#{gradeId}
+</select>
+<select id="toExamPlan"  resultType="ClassInfo">
+select * from classinfo where classId=#{classId}
+</select>
+<select id="showListClass"  resultType="ClassInfo">
+    select * from classinfo
+</select>
+<select id="getExamPlan"  resultType="ClassInfo">
+select * from classinfo where classId=#{classId}
+</select>
+  <select id="findSelf"  resultType="ClassInfo">
+      select * from classinfo where classId=#{classId}
+  </select>
+</mapper>

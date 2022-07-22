@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="cn.kgc.exam.mapper.StudentMapper">
+<select id="getAllStudent"   resultType="int">
+select count(*)  from studentinfo
+</select>
+<select id="receptionLogin" resultType="StudentInfo">
+    select * from studentinfo where studentAccount = #{studentAccount} and studentPwd = #{studentPwd}
+</select>
+<resultMap type="StudentInfo" id="studentInfo">
+        <result column="studentId" property="studentId"/>
+        <result column="studentName" property="studentName"/>
+        <result column="studentAccount" property="studentAccount"/>
+        <result column="studentPwd" property="studentPwd"/>
+        <result column="classId" property="classId"/>
+        <association property="classInfo" javaType="ClassInfo">
+            <result column="rclassId" property="classId"/>
+            <result column="className" property="className"/>
+
+        </association>
+</resultMap>
+
+<insert id="addStudent" parameterType="StudentInfo">
+  insert into StudentInfo (studentName,studentAccount,studentPwd,classId)values(#{studentName},#{studentAccount},#{studentPwd},#{classInfo.classId})
+</insert>
+
+    <select id="listClass" resultType="ClassInfo">
+   select * from classinfo
+</select>
+
+    <select id="checkStuAccount"  resultType="StudentInfo" >
+    select * from studentinfo where studentAccount=#{studentAccount}
+</select>
+
+    <resultMap type="StudentInfo" id="getClassList">
+        <id property="studentId" column="studentId"/>
+        <association property="classInfo" javaType="ClassInfo" column="classId"  select="cn.kgc.exam.mapper.ClassMapper.getClassById"/>
+    </resultMap>
+    <select id="listStudent" resultMap="getClassList">
+		select * from studentinfo
+	</select>
+
+    <delete id="deleteStudentById">
+		delete from studentinfo where studentId=#{studentId}
+	</delete>
+
+    <resultMap type="StudentInfo" id="classList">
+        <id property="studentId" column="studentId"/>
+        <association property="classInfo" javaType="ClassInfo" column="classId"  select="cn.kgc.exam.mapper.ClassMapper.getClassById"/>
+    </resultMap>
+    <select id="selectStudentById" resultMap="classList">
+		select * from studentinfo where studentId=#{studentId}
+	</select>
+
+    <update id="updateStudent" parameterType="StudentInfo">
+		update studentinfo set classId=#{classId},studentName=#{studentName},studentAccount=#{studentAccount},studentPwd=#{studentPwd}
+				where studentId=#{studentId}
+	</update>
+
+    <resultMap id="getSelf" type="StudentInfo">
+        <result column="studentId" property="studentId"/>
+        <association property="classInfo" javaType="ClassInfo" column="classId" select="cn.kgc.exam.mapper.ClassMapper.findSelf"/>
+    </resultMap>
+    <select id="findSelf" resultMap="getSelf">
+        select * from studentinfo where studentId=#{studentId}
+    </select>
+    <update id="resetPWD" parameterType="StudentInfo">
+        update studentinfo set studentPwd=#{studentPwd} where studentId=#{studentId}
+    </update>
+</mapper>

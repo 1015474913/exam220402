@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kgc.exam.mapper.GradeMapper">
+<select id="getListGrade"   resultType="GradeInfo"  >
+select * from gradeinfo  where gradeId=#{gradeId}
+</select>
+<select id="showGrade"  resultType="GradeInfo">
+select * from gradeinfo where gradeId=#{gradeId}
+</select>
+<select id="getGradeList"  resultType="GradeInfo">
+select * from gradeinfo
+</select>
+</mapper>

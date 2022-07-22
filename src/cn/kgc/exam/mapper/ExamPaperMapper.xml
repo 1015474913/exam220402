@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="cn.kgc.exam.mapper.ExamPaperMapper">
+<select id="getAllExamPaper"   resultType="int">
+select count(*) from exampaperinfo
+</select>
+<select id="getExamPapersList"  resultType="ExamPaperInfo">
+select * from exampaperinfo
+</select>
+<update id="isUpdateExamPaperScore"  parameterType="java.util.Map">
+update exampaperinfo set examPaperScore=examPaperScore+#{examPaperScore} where examPaperId=#{examPaperId}
+</update>
+<update id="isUpdateExamPaperSubjects"  parameterType="java.util.Map">
+update exampaperinfo set subjectNum=subjectNum+#{subjectNum} where examPaperId=#{examPaperId}
+</update>
+<insert id="isAddExamPaper"  parameterType="ExamPaperInfo">
+insert into exampaperinfo values(null,#{examPaperName},#{subjectNum},#{examPaperTime},#{examPaperScore},#{gradeId},#{division},#{examPaperEasy})
+</insert>
+<select id="getExamPaperList"  resultType="ExamPaperInfo">
+select * from exampaperinfo where examPaperId=#{examPaperId}
+</select>
+<select id="getExamPaper"  resultType="ExamPaperInfo">
+select * from exampaperinfo where examPaperId=#{examPaperId}
+</select>
+    <delete id="deleteExamPaper">
+		delete from exampaperinfo where examPaperId=#{examPaperId}
+	</delete>
+
+	<resultMap type="ExamPaperInfo" id="getGrade">
+		<id property="examPaperId" column="examPaperId"/>
+		<association property="grade" javaType="GradeInfo" column="gradeId" select="cn.kgc.exam.mapper.GradeMapper.getGradeById"/>
+	</resultMap>
+    <select id="getExamPaperById" resultMap="getGrade">
+		select * from exampaperinfo where examPaperId=#{examPaperId}
+	</select>
+
+    <update id="updateExamPaper" parameterType="ExamPaperInfo">
+		update exampaperinfo set division=#{division},examPaperEasy=#{examPaperEasy},gradeId=#{gradeId},examPaperName=#{examPaperName},subjectNum=#{subjectNum},examPaperScore=#{examPaperScore},examPaperTime=#{examPaperTime}
+		        where examPaperId=#{examPaperId}
+	</update>
+    <insert id="addExamPaper" parameterType="ExamPaperInfo">
+		insert into exampaperinfo(division,examPaperEasy,gradeId,examPaperName,subjectNum,examPaperScore,examPaperTime)
+			values (#{division},#{examPaperEasy},#{gradeId},#{examPaperName},#{subjectNum},#{examPaperScore},#{examPaperTime})
+	</insert>
+	<update id="minuScore">
+		update exampaperinfo set examPaperScore=examPaperScore-#{score},subjectNum=subjectNum-1 where examPaperId=#{examPaperId}
+	</update>
+	<update id="updateExamPaperSubs">
+		update exampaperinfo set subjectNum=subjectNum+#{subjectNum},examPaperScore=examPaperScore+#{totalScore}
+		       where examPaperId=#{examPaperId}
+	</update>
+</mapper>

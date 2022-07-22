@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="cn.kgc.exam.mapper.SubjectMapper">
+<resultMap  id="listSubject"  type="SubjectInfo">
+<result  column="subjectId"  property="subjectId"/>
+<association  property="grade"  javaType="GradeInfo"  column="gradeId"  select="cn.kgc.exam.mapper.GradeMapper.getListGrade"/>
+ <association  property="course"  javaType="CourseInfo"  column="courseId"  select="cn.kgc.exam.mapper.CourseMapper.getListCourse"/>
+</resultMap>
+<select id="getListSubject"  resultMap="listSubject">
+select * from subjectinfo 
+</select>
+
+<resultMap  id="showSubject"  type="SubjectInfo">
+<result  column="subjectId"  property="subjectId"/>
+<result  column="subjectName"  property="subjectName"/>
+<result  column="optionA"  property="optionA"/>
+<result  column="optionB"  property="optionB"/>
+<result  column="optionC"  property="optionC"/>
+<result  column="optionD"  property="optionD"/>
+<result  column="rightResult"  property="rightResult"/>
+<result  column="subjectScore"  property="subjectScore"/>
+<result  column="subjectType"  property="subjectType"/>
+<result  column="courseId"  property="courseId"/>
+<result  column="gradeId"  property="gradeId"/>
+<result  column="subjectEasy"  property="subjectEasy"/>
+<result  column="division"  property="division"/>
+<association  property="grade"  javaType="GradeInfo" >
+<result  column="gradeName"  property="gradeName"/>
+</association>
+<association  property="course"  javaType="CourseInfo" >
+<result  column="courseName"  property="courseName"/>
+</association>
+</resultMap>
+<select id="getSubject"   resultMap="showSubject">
+select s.*,g.gradeName,c.courseName from subjectinfo s,gradeinfo g,courseinfo c  where s.gradeId=g.gradeId and s.courseId=c.courseId and s.subjectId=#{subjectId}
+</select>
+<update  id="updateSubject"  parameterType="SubjectInfo">
+update subjectinfo set subjectName=#{subjectName},optionA=#{optionA},optionB=#{optionB},optionC=#{optionC},optionD=#{optionD},subjectScore=#{subjectScore},subjectType=#{subjectType},subjectEasy=#{subjectEasy} where subjectId=#{subjectId}
+</update>
+<select id="getAllSubject"  resultType="int">
+select count(*) from subjectinfo
+</select>
+<delete id="delSubject" parameterType="SubjectInfo">
+delete from subjectinfo where subjectId=#{subjectId}
+</delete>
+<insert id="addSubject" parameterType="SubjectInfo">
+insert into subjectinfo(subjectName,optionA,optionB,optionC,optionD,subjectScore,subjectEasy) values(#{subjectName},#{optionA},#{optionB},#{optionC},#{optionD},#{subjectScore},#{subjectEasy})
+</insert>
+<insert id="isAddSubjects"  parameterType="SubjectInfo">
+insert into subjectinfo values(null,#{subjectName},#{optionA},#{optionB},#{optionC},#{optionD},#{rightResult},#{subjectScore},#{subjectType},#{courseId},#{gradeId},#{subjectEasy},#{division})
+</insert>
+<insert id="isAddSubject"  parameterType="SubjectInfo">
+insert into subjectinfo values(null,#{subjectName},#{optionA},#{optionB},#{optionC},#{optionD},#{rightResult},#{subjectScore},#{subjectType},#{courseId},#{gradeId},#{subjectEasy},#{division})
+</insert>
+ <!-- 查询满足条件的试题id集合 -->
+ <select id="listSubjectsId" resultType="java.lang.Integer">
+  select subjectId from subjectinfo
+  <where>
+   <if test="courseId!=null and courseId!=''">
+    courseId=#{courseId}
+   </if>
+   <if test="gradeId!=null and gradeId!=''">
+    gradeId=#{gradeId}
+   </if>
+   <if test="subjectEasy!=null and subjectEasy!=''">
+    subjectEasy=#{subjectEasy}
+   </if>
+  </where>
+ </select>
+</mapper>

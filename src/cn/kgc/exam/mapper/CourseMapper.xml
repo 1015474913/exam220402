@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="cn.kgc.exam.mapper.CourseMapper">
+<select  id="getListCourse"  resultType="CourseInfo">
+select * from courseinfo where courseId=#{courseId}
+</select>
+<select id="getCourseList"  resultType="CourseInfo">
+select * from courseinfo
+</select>
+<select  id="getCourse"  resultType="CourseInfo">
+select * from courseinfo where courseId=#{courseId}
+</select>
+</mapper>

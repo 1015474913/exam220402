@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kgc.exam.mapper.ExamPlanMapper">
+<resultMap id="listExamPlan"  type="ExamPlanInfo">
+<result  column="examPlanId"   property="examPlanId"/>
+<association property="course"  javaType="CourseInfo"   column="courseId"  select="cn.kgc.exam.mapper.CourseMapper.getListCourse"/>
+<association property="clazz"  javaType="ClassInfo"   column="classId"  select="cn.kgc.exam.mapper.ClassMapper.toExamPlan"/>
+<association property="examPaper"  javaType="ExamPaperInfo"   column="examPaperId"  select="cn.kgc.exam.mapper.ExamPaperMapper.getExamPaperList"/>
+</resultMap>
+<select id="getExamPlanList"  resultMap="listExamPlan">
+select * from examplaninfo
+</select>
+<select id="getExamPlanById"  resultType="ExamPlanInfo">
+    select * from examplaninfo where examPlanId=#{examPlanId}
+</select>
+<insert id="addExamPlan" parameterType="ExamPlanInfo">
+insert into examplaninfo value (null,#{courseId},#{classId},#{examPaperId},#{beginTime})
+</insert>
+<delete id="deleteExamPlan"  parameterType="ExamPaperInfo" >
+    delete from examplaninfo where examPlanId=#{examPlanId}
+</delete>
+
+ <resultMap id="preUpdateExamPlan"  type="ExamPlanInfo">
+        <result  column="examPlanId"   property="examPlanId"/>
+        <association property="course"  javaType="CourseInfo"   column="courseId"  select="cn.kgc.exam.mapper.CourseMapper.getCourse"/>
+        <association property="clazz"  javaType="ClassInfo"   column="classId"  select="cn.kgc.exam.mapper.ClassMapper.getExamPlan"/>
+        <association property="examPaper"  javaType="ExamPaperInfo"   column="examPaperId"  select="cn.kgc.exam.mapper.ExamPaperMapper.getExamPaper"/>
+    </resultMap>
+<select id="showExamPlanById"  resultMap="preUpdateExamPlan">
+    select * from examplaninfo where examPlanId=#{examPlanId}
+</select>
+ <!--   <resultMap id="preUpdateExamPlan"  type="ExamPlanInfo">
+        <result  column="examPlanId"   property="examPlanId"/>
+        <association property="course"  javaType="CourseInfo"   column="courseId"  select="cn.kgc.exam.mapper.CourseMapper.getListCourse"/>
+        <association property="clazz"  javaType="ClassInfo"   column="classId"  select="cn.kgc.exam.mapper.ClassMapper.toExamPlan"/>
+        <association property="examPaper"  javaType="ExamPaperInfo"   column="examPaperId"  select="cn.kgc.exam.mapper.ExamPaperMapper.getExamPaperList"/>
+    </resultMap>
+    <select id="showExamPlanById"  resultMap="preUpdateExamPlan">
+    select * from examplaninfo where examPlanId=#{examPlanId}
+</select>-->
+</mapper>
